@@ -1,0 +1,27 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  pull_request: ~
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+  # Tests   
+    - name: Restore dependencies
+      run: dotnet restore KitNugs.sln
+    - name: Build
+      run: dotnet build --no-restore KitNugs.sln
+    - name: UnitTests
+      run: dotnet test --no-build --verbosity normal ./UnitTest/UnitTest.csproj
+    - name: IntegrationTest
+      run: dotnet test --no-build --verbosity normal ./IntegrationTest/IntegrationTest.csproj
+  
+  # Build as dockerimage  
+    - name: Build image
+      run: ./build/build.sh ${{ env.DOCKER_SERVICE }}
