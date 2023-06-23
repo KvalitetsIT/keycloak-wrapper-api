@@ -18,7 +18,7 @@ namespace IntegrationTest
         static AbstractIntegrationTest()
         {
             // Create network
-            
+            var network = new NetworkBuilder().Build();
 
             StartDatabase(network);
 
