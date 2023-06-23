@@ -6,9 +6,10 @@ EXPOSE 8080 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["KitNugs/KitNugs.csproj", "KitNugs/"]
-RUN dotnet restore "KitNugs/KitNugs.csproj"
 COPY . .
+RUN dotnet restore "KitNugs.sln"
+RUN dotnet build --no-restore ./KitNugs.sln
+
 WORKDIR "/src/KitNugs"
 RUN dotnet build "KitNugs.csproj" -c Release -o /app/build
 

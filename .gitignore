@@ -399,3 +399,4 @@ FodyWeavers.xsd
 
 # NSwag genrated files
 Generated/
+.vscode/
