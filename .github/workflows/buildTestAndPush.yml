@@ -6,6 +6,8 @@ name: BuildAndTestAndPush
 on:
   push:
     branches: [ "main" ]
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
