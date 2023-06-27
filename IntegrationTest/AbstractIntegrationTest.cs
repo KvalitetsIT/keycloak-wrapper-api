@@ -11,21 +11,24 @@ namespace IntegrationTest
 {
     public abstract class AbstractIntegrationTest
     {
-        protected static readonly ServiceClient client;
         protected static int servicePort = 8080;
-        private static string _connectionString;
+        private static HttpClient? _httpClient;
 
-        static AbstractIntegrationTest()
+        public static HttpClient GetHttpClient()
+        {
+            if (_httpClient == null)
+                _httpClient = createHttpClient();
+
+            return _httpClient;
+        }
+
+        private static HttpClient createHttpClient()
         {
             // Create network
             var network = new NetworkBuilder().Build();
-
-            StartDatabase(network);
-
             HttpClient? httpClient;
             if (Debugger.IsAttached)
             {
-                Environment.SetEnvironmentVariable("ConnectionStrings__db", _connectionString);
                 Environment.SetEnvironmentVariable("TEST_VAR", "TEST_VARIABLE");
 
                 var server = new WebApplicationFactory<Program>().Server;
@@ -37,10 +40,7 @@ namespace IntegrationTest
                 httpClient = new HttpClient();
             }
 
-            client = new ServiceClient(httpClient)
-            {
-                BaseUrl = $"http://localhost:{servicePort}"
-            };
+            return httpClient;
         }
 
         private static void BuildAndStartService(INetwork network)
@@ -61,7 +61,6 @@ namespace IntegrationTest
                 .WithName("service-qa")
                 .WithNetwork(network)
                 .WithEnvironment("TEST_VAR", "TEST_VARIABLE")
-                .WithEnvironment("ConnectionStrings__db", "server=db-qa,3306;user=hellouser;password=secret1234;database=hellodb")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r.ForPath("/healthz").ForPort(8081)))
                 .Build();
 
@@ -69,23 +68,6 @@ namespace IntegrationTest
                 .Wait();
 
             servicePort = service.GetMappedPublicPort(8080);
-        }
-
-        private static void StartDatabase(INetwork network)
-        {
-            // Create and start database container
-            var db = new Testcontainers.MariaDb.MariaDbBuilder()
-                .WithUsername("hellouser")
-                .WithNetwork(network)
-                .WithName("db-qa")
-                .WithPassword("secret1234")
-                .WithDatabase("hellodb")
-                .Build();
-
-            db.StartAsync()
-                .Wait();
-
-            _connectionString = db.GetConnectionString();
         }
     }
 }
