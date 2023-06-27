@@ -17,6 +17,19 @@ builder.Services.AddScoped<IServiceConfiguration, ServiceConfiguration>();
 builder.Services.AddScoped<IUserService, UserServiceStub>();
 builder.Services.AddScoped<ISessionIdAccessor, DefaultSessionIdAccessor>();
 
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.AllowAnyHeader();
+            policy.AllowAnyOrigin();
+            policy.AllowAnyMethod();
+        });
+});
+
+
 builder.Services.AddHttpContextAccessor();
 
 // Add controllers
@@ -32,6 +45,7 @@ builder.Services.AddHealthChecks()
                 .ForwardToPrometheus();
 
 var app = builder.Build();
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseMiddleware<LogHeaderMiddleware>();
 
@@ -43,7 +57,6 @@ if (app.Environment.IsDevelopment())
     app.UseOpenApi();
     app.UseSwaggerUi3();
 }
-
 app.UseAuthorization();
 
 // Map controllers
