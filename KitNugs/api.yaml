@@ -6,7 +6,7 @@ info:
   contact:
     email: development@kvalitetitsit.dk
 tags:
-  - name: KITHUGS
+  - name: User
     description: KITHUGS related API's
 
 servers:
@@ -27,33 +27,67 @@ servers:
         default: 8080
 
 paths:
-  /v1/hello:
+  /v1/users:
     get:
       tags:
-        - KITHUGS
+        - User
       parameters:
-        - name: name
-          in: query
-          required: true
-          description: Name. If name is "NOT_VALID" an validation error occurs.
-          schema:
-            type: string
-            maxLength: 10
-          example: 'John Doe'
-      summary: Call the thugs service
-      description: Post your name and get some hugs or meet some thugs.
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+      summary: Get all users
+      description: Gets all users
       responses:
         '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/helloResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+    post:
+      tags:
+        - User
+      summary: Create a user
+      description: Create a user
+      requestBody:
+        description: The new user to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUserRequest'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createUserResponse'
         '400':
-          $ref: '#/components/responses/400'
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/basicError'
+  
 
 
 components:
+  parameters:
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+      description: The "page" to get items for. This will skip the first (page-1)*limit items.
+    limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+      description: The maximum number of items to be retrieved. This is also the page size when using the 'page' parameter.
+
   responses:
     '400':
       description: "Bad Request. This could be because: * One of the required parameters/properties are missing or is empty <br> * Length of input is exceeding maximum length <br> (See a possible detailed error message in the in the response.)"
@@ -67,27 +101,32 @@ components:
       description: "Forbidden. This could be because: <br> * The requested information does not belong the organisation of the user <br> * The calling user does not have the required roles"
 
   schemas:
-    helloResponse:
+    UserResponse:
       type: object
       required:
-        - name
-        - now
-        - fromC_configuration
+        - username
       properties:
-        name:
+        username:
           description: Your name
           type: string
           example: "John Doe"
-        now:
-          description: Time request was received
-          type: string
-          format: date-time
-        i_can_be_null:
-          type: string
-          nullable: true
-        from_configuration:
-          type: string
+      
       additionalProperties: false
+
+    getUsersUserResponse:
+      allOf:
+        - type: array
+          items:
+            $ref: '#/components/schemas/UserResponse'
+
+    createUserResponse:
+      allOf:
+        - $ref: '#/components/schemas/UserResponse'
+  
+    createUserRequest:
+       allOf:
+        - $ref: '#/components/schemas/UserResponse'
+          
 
     detailedError:
       allOf:

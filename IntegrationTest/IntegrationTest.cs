@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace IntegrationTest
@@ -5,24 +6,67 @@ namespace IntegrationTest
     public class Tests : AbstractIntegrationTest
     {
         [Test]
-        public void TestGetHello()
+        public void UsersAllAsync_SystemHasNoUsers_ReturnsEmptyList()
         {
-            using (var httpClient = GetHttpClient())
+            var httpClient = GetHttpClient();
+
+            // Use the resource
+            var client = new ServiceClient(httpClient)
             {
-                // Use the resource
-                var client = new ServiceClient(httpClient)
-                {
-                    BaseUrl = $"http://localhost:{servicePort}"
-                };
+                BaseUrl = $"http://localhost:{servicePort}"
+            };
 
-                var name = Guid.NewGuid().ToString();
+            var name = Guid.NewGuid().ToString();
 
-                var response = client.HelloAsync(name).Result;
+            Assert.DoesNotThrowAsync(() => client.UsersAllAsync(null, null));
 
-                Assert.That(response, Is.Not.Null);
-                Assert.That(response.Name, Is.EqualTo(name));
-                Assert.That(response.From_configuration, Is.EqualTo("TEST_VARIABLE"));
-            }
+        }
+
+        [Test]
+        public void UsersAsync_WhenUserAreCreatedItCanBeFetched()
+        {
+
+            var httpClient = GetHttpClient();
+            // Use the resource
+            var client = new ServiceClient(httpClient)
+            {
+                BaseUrl = $"http://localhost:{servicePort}"
+            };
+
+            var name = Guid.NewGuid().ToString();
+
+            UserResponse body = new UserResponse
+            {
+                Username = "jens"
+            };
+
+            var creationResponse = client.UsersAsync(body).Result;
+            var getUsers = client.UsersAllAsync(null, null).Result;
+
+            Assert.AreEqual(body.Username, creationResponse.Username);
+            Assert.AreEqual(1, getUsers.Count());
+            Assert.AreEqual(creationResponse.Username, getUsers.First().Username);
+
+        }
+        
+        [Test]
+        public void UsersAsync_UserIsCreatedWithNullAsUsername_Error()
+        {
+
+            var httpClient = GetHttpClient();
+            // Use the resource
+            var client = new ServiceClient(httpClient)
+            {
+                BaseUrl = $"http://localhost:{servicePort}"
+            };
+
+            var name = Guid.NewGuid().ToString();
+
+            UserResponse body = new UserResponse
+            {
+                Username = null
+            };
+            var exception = Assert.ThrowsAsync<JsonSerializationException>(()=>client.UsersAsync(body));
         }
     }
 }

@@ -7,6 +7,7 @@ namespace KitNugs.Controllers
     {
         private readonly ILogger<HelloController> _logger;
         private readonly IHelloService _helloService;
+        private static List<UserResponse> _storage = new List<UserResponse>();
 
         public HelloController(ILogger<HelloController> logger, IHelloService helloService)
         {
@@ -14,16 +15,15 @@ namespace KitNugs.Controllers
             _helloService = helloService;
         }
 
-        public override async Task<HelloResponse> Hello([FromQuery] string name)
+        public override async Task<UserResponse> Users([FromBody] UserResponse body)
         {
-            _logger.LogInformation("Entering GET!");
-            var businessResult = await _helloService.BusinessLogic(name);
+            _storage.Add(body);
+            return await Task.FromResult(body);
+        }
 
-            return new HelloResponse { 
-                Now = businessResult.Now, 
-                Name = businessResult.Name,
-                From_configuration = businessResult.FromConfiguration
-            };
+        public override async Task<ICollection<UserResponse>> UsersAll([FromQuery] int? page, [FromQuery] int? limit)
+        {
+            return await Task.FromResult(_storage);
         }
     }
 }
