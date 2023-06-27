@@ -72,9 +72,6 @@ using (var scope = app.Services.CreateScope())
 {
     // Ensure all env variables is set.
     scope.ServiceProvider.GetRequiredService<IServiceConfiguration>();
-
-    using var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    dbContext.Database.Migrate();
 }
 
 app.Run();
