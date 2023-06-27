@@ -1,6 +1,5 @@
 using KitNugs.Configuration;
 using KitNugs.Logging;
-using KitNugs.Repository;
 using KitNugs.Services;
 using Microsoft.EntityFrameworkCore;
 using Prometheus;
@@ -15,7 +14,7 @@ builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Confi
 
 // Add services to the container.
 builder.Services.AddScoped<IServiceConfiguration, ServiceConfiguration>();
-builder.Services.AddScoped<IHelloService, HelloService>();
+builder.Services.AddScoped<IUserService, UserServiceStub>();
 builder.Services.AddScoped<ISessionIdAccessor, DefaultSessionIdAccessor>();
 
 builder.Services.AddHttpContextAccessor();

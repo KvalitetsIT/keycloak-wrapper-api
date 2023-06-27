@@ -6,24 +6,22 @@ namespace KitNugs.Controllers
     public class HelloController : HelloControllerBase
     {
         private readonly ILogger<HelloController> _logger;
-        private readonly IHelloService _helloService;
-        private static List<UserResponse> _storage = new List<UserResponse>();
+        private readonly IUserService _userService;
 
-        public HelloController(ILogger<HelloController> logger, IHelloService helloService)
+        public HelloController(ILogger<HelloController> logger, IUserService userService)
         {
             _logger = logger;
-            _helloService = helloService;
+            _userService = userService;
         }
 
         public override async Task<UserResponse> Users([FromBody] UserResponse body)
         {
-            _storage.Add(body);
-            return await Task.FromResult(body);
+            return await _userService.CreateUser(body); 
         }
 
         public override async Task<ICollection<UserResponse>> UsersAll([FromQuery] int? page, [FromQuery] int? limit)
         {
-            return await Task.FromResult(_storage);
+            return await _userService.GetUsers();
         }
     }
 }
