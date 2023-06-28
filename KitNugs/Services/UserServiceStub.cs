@@ -12,7 +12,7 @@ namespace KitNugs.Services
 
         public UserServiceStub(IServiceConfiguration configuration, ILogger<UserServiceStub> logger)
         {
-            _configurationValue = configuration.GetConfigurationValue(ConfigurationVariables.TEST_VAR);
+            _configurationValue = configuration.GetConfigurationValue(ConfigurationVariables.AllowedAudience);
             _logger = logger;
         }
 

@@ -16,7 +16,7 @@ namespace UnitTest.Services
             ILogger<UserServiceStub> logger = Substitute.For<ILogger<UserServiceStub>>();
 
             serviceConfiguration = Substitute.For<IServiceConfiguration>();
-            serviceConfiguration.GetConfigurationValue(ConfigurationVariables.TEST_VAR).Returns("VALUE");
+            serviceConfiguration.GetConfigurationValue(ConfigurationVariables.AllowedAudience).Returns("VALUE");
 
             helloService = new UserServiceStub(serviceConfiguration, logger);
         }

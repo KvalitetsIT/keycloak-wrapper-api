@@ -13,13 +13,16 @@
     <None Remove="Entities\**" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="7.0.5" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore"
+      Version="7.0.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets"
+      Version="1.18.1" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.19.0" />
     <PackageReference Include="NSwag.MSBuild" Version="13.19.0">
       <PrivateAssets>all</PrivateAssets>
@@ -32,9 +35,10 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
   </ItemGroup>
-  
+
   <Target Name="NSwag" BeforeTargets="BeforeBuild">
-    <Exec Command="$(NSwagExe_Net70) openapi2cscontroller /input:api.yaml /classname:Hello /namespace:KitNugs.Controllers /output:Generated/HelloController.cs /UseLiquidTemplates:true /AspNetNamespace:Microsoft.AspNetCore.Mvc /ControllerStyle:abstract /ControllerBaseClass:Microsoft.AspNetCore.Mvc.ControllerBase" />
+    <Exec
+      Command="$(NSwagExe_Net70) openapi2cscontroller /input:api.yaml /classname:Hello /namespace:KitNugs.Controllers /output:Generated/HelloController.cs /UseLiquidTemplates:true /AspNetNamespace:Microsoft.AspNetCore.Mvc /ControllerStyle:abstract /ControllerBaseClass:Microsoft.AspNetCore.Mvc.ControllerBase" />
     <ItemGroup>
       <Compile Include="Generated/HelloController.cs" Exclude="@(Compile)" />
     </ItemGroup>

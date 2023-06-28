@@ -13,7 +13,7 @@ namespace UnitTest.Configuration
         [Test]
         public void TestBusinessLogic()
         {
-            var inMemorySettings = new Dictionary<string, string> {{"TEST_VAR", "VALUE"}};
+            var inMemorySettings = new Dictionary<string, string> {{"AllowedAudience", "VALUE"}};
             
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(inMemorySettings)
@@ -21,7 +21,7 @@ namespace UnitTest.Configuration
 
             var serviceConfiguration = new ServiceConfiguration(configuration);
 
-            var result = serviceConfiguration.GetConfigurationValue(ConfigurationVariables.TEST_VAR);
+            var result = serviceConfiguration.GetConfigurationValue(ConfigurationVariables.AllowedAudience);
 
             Assert.That(result, Is.EqualTo("VALUE"));
         }

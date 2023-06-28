@@ -2,7 +2,9 @@
 {
     public enum ConfigurationVariables
     {
-        TEST_VAR,
+        IssuerCertificate,
+        AllowedIssuer,
+        AllowedAudience
     }
 
     public interface IServiceConfiguration

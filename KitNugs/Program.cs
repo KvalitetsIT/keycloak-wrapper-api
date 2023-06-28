@@ -1,7 +1,11 @@
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using KitNugs.Configuration;
 using KitNugs.Logging;
 using KitNugs.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Prometheus;
 using Serilog;
 
@@ -17,7 +21,7 @@ builder.Services.AddScoped<IServiceConfiguration, ServiceConfiguration>();
 builder.Services.AddScoped<IUserService, UserServiceStub>();
 builder.Services.AddScoped<ISessionIdAccessor, DefaultSessionIdAccessor>();
 
-var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -28,7 +32,33 @@ builder.Services.AddCors(options =>
             policy.AllowAnyMethod();
         });
 });
+var serviceConfiguration = new ServiceConfiguration(builder.Configuration);
 
+var rawCert = Convert.FromBase64String(serviceConfiguration.GetConfigurationValue(ConfigurationVariables.IssuerCertificate));
+var cert = new X509Certificate2(rawCert);
+
+builder.Services
+    .AddAuthentication(opt =>
+    {
+        opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(opt =>
+    {
+        opt.IncludeErrorDetails = true;
+        opt.SaveToken = true;
+        opt.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = serviceConfiguration.GetConfigurationValue(ConfigurationVariables.AllowedIssuer),
+            ValidAudience = serviceConfiguration.GetConfigurationValue(ConfigurationVariables.AllowedAudience),
+            IssuerSigningKey = new X509SecurityKey(cert)
+        };
+        opt.Validate();
+    });
 
 builder.Services.AddHttpContextAccessor();
 
@@ -57,6 +87,8 @@ if (app.Environment.IsDevelopment())
     app.UseOpenApi();
     app.UseSwaggerUi3();
 }
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 // Map controllers
