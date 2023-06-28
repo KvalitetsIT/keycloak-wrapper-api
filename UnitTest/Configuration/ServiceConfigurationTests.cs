@@ -14,9 +14,10 @@ namespace UnitTest.Configuration
         public void TestBusinessLogic()
         {
             var inMemorySettings = new Dictionary<string, string> {
-                {"AllowedAudience", "VALUE"},
-                {"IssuerCertificate", "VALUE"},
-                {"AllowedIssuer", "VALUE"}
+                {"TokenValidation", "false"},
+                {"IssuerCertificate", "false"},
+                {"AllowedIssuer", "false"},
+                {"AllowedAudience", "false"},
             };
 
             IConfiguration configuration = new ConfigurationBuilder()
@@ -27,13 +28,13 @@ namespace UnitTest.Configuration
 
             var result = serviceConfiguration.GetConfigurationValue(ConfigurationVariables.AllowedAudience);
 
-            Assert.That(result, Is.EqualTo("VALUE"));
+            Assert.That(result, Is.EqualTo("false"));
         }
 
         [Test]
         public void TestMissingVariableThrowsException()
         {
-            var inMemorySettings = new Dictionary<string, string> { { "NOT_FOUND", "VALUE" } };
+            var inMemorySettings = new Dictionary<string, string> { {"TokenValidation", "false"} };
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(inMemorySettings)
                 .Build();

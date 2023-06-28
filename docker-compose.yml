@@ -1,16 +1,17 @@
 version: '3.4'
 
-services:  
+services:
   kitnugs:
     image: ${DOCKER_REGISTRY-}kitnugs
     build:
       context: .
       dockerfile: KitNugs/Dockerfile
-    environment: 
-        - IssuerCertificate=MIIC6jCCAdKgAwIBAgIQRIhbmYhNU20lr8OoHcnvATANBgkqhkiG9w0BAQsFADArMRUwEwYDVQQKEwxjZXJ0LW1hbmFnZXIxEjAQBgNVBAMTCXZkeGFwaS5kazAeFw0yMzA2MTYwNjAwMDBaFw0zMzA2MTMwNjAwMDBaMBUxEzARBgNVBAMTClNTTy1Ccm9rZXIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQD6UlfvjTXmtkxplMB+kvLAaIF6xXkJNiBPktWZjPZILbPAj/Kf2mg2gMkFZssTcpql2wYY8w2zE4lgL/8g6nOHO2kl+EhDSh+nwssdKFDsYRUjyOHOdLXmGdbgmtGAO8/xxldWe4zjhDYAzdqsVIUYbq+0Hn98RBkYYTin2pgEtHq1+cLXQh2M/cm2wp63NH3UJOm8CbS6K1IkZAcdQipMMnOtCoAMO7h690VICpXYEp9cLuYeEprKNLkwpOXPs5NHnBvIvC3hrh3Wo07UW0tyY24BTfelpnPJEIbqifFANMEqfnF1IM20eYzWfgDwm5r/UfrYPvKIEnlwvc6rgs55AgMBAAGjIDAeMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMA0GCSqGSIb3DQEBCwUAA4IBAQAulVNzSkBT1U02HRJqS0oWFaC8/xvczf07qtITOGCuHnKc6nyTpZGNLKqUB4rs5PPdCPjzRHCcNbdg1sJuYIMbHQAv2ECfa1GacwiGsarf+nscpXdD6mlOT6TblQBQ0e/idrO1TKzvVex9lx7XhbPf/oGnEKrAcJoJvaGPqhjx6AoeLwaKAI2tcURsBpd7OcbgF7/9LinXeAUxa9KNGnxbPa9pVG28YwpCXVTblI9wX21cqAZmkrUrCikxaJxYvz74NLIyixQZhUsM95+Obo/B9iYz5mmBj/Gq0EnGbKDktLEj7mEUiftnb484d6T5zbDvq3z4UIOW4V8ESVEyxXww
-        - AllowedIssuer=https://keycloak.kubetest.novax.dk/auth/realms/SSO-Broker
-        - AllowedAudience=account
-        - "Serilog__MinimumLevel__Default=Debug"
+    environment:
+      #- TokenValidation=false
+      - IssuerCertificate=MIIC6jCCAdKgAwIBAgIQRIhbmYhNU20lr8OoHcnvATANBgkqhkiG9w0BAQsFADArMRUwEwYDVQQKEwxjZXJ0LW1hbmFnZXIxEjAQBgNVBAMTCXZkeGFwaS5kazAeFw0yMzA2MTYwNjAwMDBaFw0zMzA2MTMwNjAwMDBaMBUxEzARBgNVBAMTClNTTy1Ccm9rZXIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQD6UlfvjTXmtkxplMB+kvLAaIF6xXkJNiBPktWZjPZILbPAj/Kf2mg2gMkFZssTcpql2wYY8w2zE4lgL/8g6nOHO2kl+EhDSh+nwssdKFDsYRUjyOHOdLXmGdbgmtGAO8/xxldWe4zjhDYAzdqsVIUYbq+0Hn98RBkYYTin2pgEtHq1+cLXQh2M/cm2wp63NH3UJOm8CbS6K1IkZAcdQipMMnOtCoAMO7h690VICpXYEp9cLuYeEprKNLkwpOXPs5NHnBvIvC3hrh3Wo07UW0tyY24BTfelpnPJEIbqifFANMEqfnF1IM20eYzWfgDwm5r/UfrYPvKIEnlwvc6rgs55AgMBAAGjIDAeMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMA0GCSqGSIb3DQEBCwUAA4IBAQAulVNzSkBT1U02HRJqS0oWFaC8/xvczf07qtITOGCuHnKc6nyTpZGNLKqUB4rs5PPdCPjzRHCcNbdg1sJuYIMbHQAv2ECfa1GacwiGsarf+nscpXdD6mlOT6TblQBQ0e/idrO1TKzvVex9lx7XhbPf/oGnEKrAcJoJvaGPqhjx6AoeLwaKAI2tcURsBpd7OcbgF7/9LinXeAUxa9KNGnxbPa9pVG28YwpCXVTblI9wX21cqAZmkrUrCikxaJxYvz74NLIyixQZhUsM95+Obo/B9iYz5mmBj/Gq0EnGbKDktLEj7mEUiftnb484d6T5zbDvq3z4UIOW4V8ESVEyxXww
+      - AllowedIssuer=https://keycloak.kubetest.novax.dk/auth/realms/SSO-Broker
+      - AllowedAudience=account
+      - "Serilog__MinimumLevel__Default=Debug"
     ports:
-        - "8080:8080"
-        - "8081:8081"
+      - "8080:8080"
+      - "8081:8081"

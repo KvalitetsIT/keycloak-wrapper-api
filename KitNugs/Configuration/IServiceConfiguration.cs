@@ -4,7 +4,8 @@
     {
         IssuerCertificate,
         AllowedIssuer,
-        AllowedAudience
+        AllowedAudience,
+        TokenValidation
     }
 
     public interface IServiceConfiguration

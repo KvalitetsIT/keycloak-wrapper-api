@@ -32,34 +32,36 @@ builder.Services.AddCors(options =>
             policy.AllowAnyMethod();
         });
 });
+
 var serviceConfiguration = new ServiceConfiguration(builder.Configuration);
+if (serviceConfiguration.GetConfigurationValue(ConfigurationVariables.TokenValidation) != "false")
+{
+    var rawCert = Convert.FromBase64String(serviceConfiguration.GetConfigurationValue(ConfigurationVariables.IssuerCertificate));
+    var cert = new X509Certificate2(rawCert);
 
-var rawCert = Convert.FromBase64String(serviceConfiguration.GetConfigurationValue(ConfigurationVariables.IssuerCertificate));
-var cert = new X509Certificate2(rawCert);
-
-builder.Services
-    .AddAuthentication(opt =>
-    {
-        opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(opt =>
-    {
-        opt.IncludeErrorDetails = true;
-        opt.SaveToken = true;
-        opt.TokenValidationParameters = new TokenValidationParameters()
+    builder.Services
+        .AddAuthentication(opt =>
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = serviceConfiguration.GetConfigurationValue(ConfigurationVariables.AllowedIssuer),
-            ValidAudience = serviceConfiguration.GetConfigurationValue(ConfigurationVariables.AllowedAudience),
-            IssuerSigningKey = new X509SecurityKey(cert)
-        };
-        opt.Validate();
-    });
-
+            opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(opt =>
+        {
+            opt.IncludeErrorDetails = true;
+            opt.SaveToken = true;
+            opt.TokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = serviceConfiguration.GetConfigurationValue(ConfigurationVariables.AllowedIssuer),
+                ValidAudience = serviceConfiguration.GetConfigurationValue(ConfigurationVariables.AllowedAudience),
+                IssuerSigningKey = new X509SecurityKey(cert)
+            };
+            opt.Validate();
+        });
+}
 builder.Services.AddHttpContextAccessor();
 
 // Add controllers

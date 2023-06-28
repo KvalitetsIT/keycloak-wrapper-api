@@ -29,7 +29,7 @@ namespace IntegrationTest
             HttpClient? httpClient;
             if (Debugger.IsAttached)
             {
-                Environment.SetEnvironmentVariable("TEST_VAR", "TEST_VARIABLE");
+                Environment.SetEnvironmentVariable("TokenValidation", "false");
 
                 var server = new WebApplicationFactory<Program>().Server;
                 httpClient = server.CreateClient();
@@ -60,9 +60,7 @@ namespace IntegrationTest
                 .WithPortBinding(8081, true)
                 .WithName("service-qa")
                 .WithNetwork(network)
-                .WithEnvironment("IssuerCertificate", "TEST_VARIABLE")
-                .WithEnvironment("AllowedIssuer", "TEST_VARIABLE")
-                .WithEnvironment("AllowedAudience", "TEST_VARIABLE")
+                .WithEnvironment("TokenValidation", "false")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r.ForPath("/healthz").ForPort(8081)))
                 .Build();
 
