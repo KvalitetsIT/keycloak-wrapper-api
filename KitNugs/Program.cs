@@ -34,8 +34,11 @@ builder.Services.AddCors(options =>
 });
 
 var serviceConfiguration = new ServiceConfiguration(builder.Configuration);
+
 if (serviceConfiguration.GetConfigurationValue(ConfigurationVariables.TokenValidation) != "false")
 {
+    Console.WriteLine("Token validation is used!");
+    
     var rawCert = Convert.FromBase64String(serviceConfiguration.GetConfigurationValue(ConfigurationVariables.IssuerCertificate));
     var cert = new X509Certificate2(rawCert);
 

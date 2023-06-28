@@ -6,9 +6,13 @@
 
         public ServiceConfiguration(IConfiguration configuration)
         {
-            foreach(string name in Enum.GetNames(typeof(ConfigurationVariables)))
+            foreach (string name in Enum.GetNames(typeof(ConfigurationVariables)))
             {
-                _values[name] = configuration.GetValue<string>(name) ?? throw new UnsetEnvironmentVariableException(name); ;
+                var key = name;
+                var value = configuration.GetValue<string>(name) ?? throw new UnsetEnvironmentVariableException(name);
+                _values[key] = value;
+                
+                Console.WriteLine(name + ": " + value);
             }
         }
 
