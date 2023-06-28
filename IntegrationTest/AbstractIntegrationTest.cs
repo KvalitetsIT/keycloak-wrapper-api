@@ -60,7 +60,9 @@ namespace IntegrationTest
                 .WithPortBinding(8081, true)
                 .WithName("service-qa")
                 .WithNetwork(network)
-                .WithEnvironment("TEST_VAR", "TEST_VARIABLE")
+                .WithEnvironment("IssuerCertificate", "TEST_VARIABLE")
+                .WithEnvironment("AllowedIssuer", "TEST_VARIABLE")
+                .WithEnvironment("AllowedAudience", "TEST_VARIABLE")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r.ForPath("/healthz").ForPort(8081)))
                 .Build();
 
