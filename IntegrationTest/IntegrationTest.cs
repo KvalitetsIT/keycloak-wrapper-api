@@ -8,14 +8,6 @@ namespace IntegrationTest
         [Test]
         public void UsersAllAsync_SystemHasNoUsers_ReturnsEmptyList()
         {
-            var httpClient = GetHttpClient();
-
-            // Use the resource
-            var client = new ServiceClient(httpClient)
-            {
-                BaseUrl = $"http://localhost:{servicePort}"
-            };
-
             var name = Guid.NewGuid().ToString();
 
             Assert.DoesNotThrowAsync(() => client.UsersAllAsync(null, null));
@@ -25,13 +17,6 @@ namespace IntegrationTest
         [Test]
         public void UsersAsync_WhenUserAreCreatedItCanBeFetched()
         {
-
-            var httpClient = GetHttpClient();
-            // Use the resource
-            var client = new ServiceClient(httpClient)
-            {
-                BaseUrl = $"http://localhost:{servicePort}"
-            };
 
             var name = Guid.NewGuid().ToString();
 
@@ -48,17 +33,10 @@ namespace IntegrationTest
             Assert.AreEqual(creationResponse.Username, getUsers.First().Username);
 
         }
-        
+
         [Test]
         public void UsersAsync_UserIsCreatedWithNullAsUsername_Error()
         {
-
-            var httpClient = GetHttpClient();
-            // Use the resource
-            var client = new ServiceClient(httpClient)
-            {
-                BaseUrl = $"http://localhost:{servicePort}"
-            };
 
             var name = Guid.NewGuid().ToString();
 
@@ -66,7 +44,7 @@ namespace IntegrationTest
             {
                 Username = null
             };
-            var exception = Assert.ThrowsAsync<JsonSerializationException>(()=>client.UsersAsync(body));
+            var exception = Assert.ThrowsAsync<JsonSerializationException>(() => client.UsersAsync(body));
         }
     }
 }

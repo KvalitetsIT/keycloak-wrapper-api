@@ -11,26 +11,19 @@ namespace IntegrationTest
 {
     public abstract class AbstractIntegrationTest
     {
+        protected static readonly ServiceClient client;
         protected static int servicePort = 8080;
-        private static HttpClient? _httpClient;
+        private static string _connectionString;
 
-        public static HttpClient GetHttpClient()
-        {
-            if (_httpClient == null)
-                _httpClient = createHttpClient();
-
-            return _httpClient;
-        }
-
-        private static HttpClient createHttpClient()
+        static AbstractIntegrationTest()
         {
             // Create network
             var network = new NetworkBuilder().Build();
+
             HttpClient? httpClient;
             if (Debugger.IsAttached)
             {
                 Environment.SetEnvironmentVariable("TokenValidation", "false");
-
                 var server = new WebApplicationFactory<Program>().Server;
                 httpClient = server.CreateClient();
             }
@@ -40,7 +33,10 @@ namespace IntegrationTest
                 httpClient = new HttpClient();
             }
 
-            return httpClient;
+            client = new ServiceClient(httpClient)
+            {
+                BaseUrl = $"http://localhost:{servicePort}"
+            };
         }
 
         private static void BuildAndStartService(INetwork network)
@@ -61,11 +57,14 @@ namespace IntegrationTest
                 .WithName("service-qa")
                 .WithNetwork(network)
                 .WithEnvironment("TokenValidation", "false")
+                .WithEnvironment("IssuerCertificate", "VALUE")
+                .WithEnvironment("AllowedIssuer", "VALUE")
+                .WithEnvironment("AllowedAudience", "VALUE")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r.ForPath("/healthz").ForPort(8081)))
                 .Build();
 
             service.StartAsync()
-                .Wait();
+            .Wait();
 
             servicePort = service.GetMappedPublicPort(8080);
         }

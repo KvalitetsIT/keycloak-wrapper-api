@@ -24,7 +24,9 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
-
+  # Build as dockerimage (If dockerimage cannot be build the integrationtests will hang)
+    - name: Build image
+      run: ./build/build.sh ${{ env.DOCKER_SERVICE }}
   # Tests   
     - name: Restore dependencies
       run: dotnet restore KitNugs.sln
@@ -34,10 +36,6 @@ jobs:
       run: dotnet test --no-build --verbosity normal ./UnitTest/UnitTest.csproj
     - name: IntegrationTest
       run: dotnet test --no-build --verbosity normal ./IntegrationTest/IntegrationTest.csproj
-  
-  # Build as dockerimage  
-    - name: Build image
-      run: ./build/build.sh ${{ env.DOCKER_SERVICE }}
     
   # Tag and push to dockerhub
     - name: Login to docker
