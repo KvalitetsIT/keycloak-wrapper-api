@@ -58,7 +58,7 @@ paths:
             schema:
               $ref: '#/components/schemas/createUserRequest'
       responses:
-        '200':
+        '201':
           description: Ok
           content:
             application/json:

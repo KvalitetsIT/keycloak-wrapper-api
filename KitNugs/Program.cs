@@ -1,5 +1,7 @@
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using FS.Keycloak.RestApiClient.Api;
+using FS.Keycloak.RestApiClient.Client;
 using KitNugs.Configuration;
 using KitNugs.Logging;
 using KitNugs.Services;
@@ -17,9 +19,31 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.
+var serviceConfiguration = new ServiceConfiguration(builder.Configuration);
+
 builder.Services.AddScoped<IServiceConfiguration, ServiceConfiguration>();
-builder.Services.AddScoped<IUserService, UserServiceStub>();
+builder.Services.AddScoped<IUserService, UserServiceKeycloak>();
 builder.Services.AddScoped<ISessionIdAccessor, DefaultSessionIdAccessor>();
+builder.Services.AddScoped<IUsersApi>((sp) =>
+{
+    var conf = sp.GetService<IServiceConfiguration>();
+    var httpClient = new CustomKeycloakHttpClient(
+        conf.GetConfigurationValue(ConfigurationVariables.AuthServerUrl),
+        conf.GetConfigurationValue(ConfigurationVariables.RealmToManage),
+        conf.GetConfigurationValue(ConfigurationVariables.ClientId),
+        conf.GetConfigurationValue(ConfigurationVariables.GrantType),
+        conf.GetConfigurationValue(ConfigurationVariables.AuthUsername),
+        conf.GetConfigurationValue(ConfigurationVariables.AuthPassword)
+    );
+
+    var usersApi = new UsersApi(
+            httpClient,
+            new Configuration { BasePath = $"{httpClient.AuthServerUrl}/admin/realms" },
+            null
+        );
+
+    return usersApi;
+});
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
@@ -33,12 +57,12 @@ builder.Services.AddCors(options =>
         });
 });
 
-var serviceConfiguration = new ServiceConfiguration(builder.Configuration);
+
 
 if (serviceConfiguration.GetConfigurationValue(ConfigurationVariables.TokenValidation) != "false")
 {
     Console.WriteLine("Token validation is used!");
-    
+
     var rawCert = Convert.FromBase64String(serviceConfiguration.GetConfigurationValue(ConfigurationVariables.IssuerCertificate));
     var cert = new X509Certificate2(rawCert);
 

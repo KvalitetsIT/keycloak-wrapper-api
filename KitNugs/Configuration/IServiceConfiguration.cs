@@ -5,7 +5,13 @@
         IssuerCertificate,
         AllowedIssuer,
         AllowedAudience,
-        TokenValidation
+        TokenValidation,
+        AuthServerUrl,
+        AuthPassword,
+        AuthUsername,
+        RealmToManage,
+        ClientId,
+        GrantType,
     }
 
     public interface IServiceConfiguration

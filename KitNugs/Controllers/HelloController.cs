@@ -18,7 +18,8 @@ namespace KitNugs.Controllers
 
         public override async Task<UserResponse> Users([FromBody] UserResponse body)
         {
-            return await _userService.CreateUser(body);
+            await _userService.CreateUser(body);
+            return body;
         }
 
         public override async Task<ICollection<UserResponse>> UsersAll([FromQuery] int? page, [FromQuery] int? limit)

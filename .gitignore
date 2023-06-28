@@ -400,3 +400,5 @@ FodyWeavers.xsd
 # NSwag genrated files
 Generated/
 .vscode/
+
+KitNugs/appsettings.Development.json
