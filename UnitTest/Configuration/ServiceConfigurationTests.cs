@@ -13,8 +13,12 @@ namespace UnitTest.Configuration
         [Test]
         public void TestBusinessLogic()
         {
-            var inMemorySettings = new Dictionary<string, string> {{"AllowedAudience", "VALUE"}};
-            
+            var inMemorySettings = new Dictionary<string, string> {
+                {"AllowedAudience", "VALUE"},
+                {"IssuerCertificate", "VALUE"},
+                {"AllowedIssuer", "VALUE"}
+            };
+
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(inMemorySettings)
                 .Build();
@@ -29,14 +33,14 @@ namespace UnitTest.Configuration
         [Test]
         public void TestMissingVariableThrowsException()
         {
-            var inMemorySettings = new Dictionary<string, string> {{"NOT_FOUND", "VALUE"}};
+            var inMemorySettings = new Dictionary<string, string> { { "NOT_FOUND", "VALUE" } };
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(inMemorySettings)
                 .Build();
 
             var exception = Assert.Throws<UnsetEnvironmentVariableException>(() => new ServiceConfiguration(configuration));
 
-            Assert.That(exception.Message, Is.EqualTo("Environment variable 'TEST_VAR' not set."));
+            Assert.That(exception.Message, Is.EqualTo("Environment variable 'IssuerCertificate' not set."));
         }
     }
 }
