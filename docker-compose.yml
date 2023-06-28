@@ -12,11 +12,10 @@ services:
       - AllowedIssuer=https://keycloak.kubetest.novax.dk/auth/realms/SSO-Broker
       - AllowedAudience=account
       
-      - ClientId=keycloak-createuser-api
       - GrantType=client_credentials
       - AuthServerUrl=https://keycloak.kubetest.novax.dk/auth
-      - AuthPassword=
-      - AuthUsername=keycloak-createuser-api
+      - ClientSecret=
+      - ClientId=keycloak-createuser-api
       - RealmToManage=SSO-Local
 
       - "Serilog__MinimumLevel__Default=Debug"

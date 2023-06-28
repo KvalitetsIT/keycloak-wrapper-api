@@ -32,8 +32,7 @@ builder.Services.AddScoped<IUsersApi>((sp) =>
         conf.GetConfigurationValue(ConfigurationVariables.RealmToManage),
         conf.GetConfigurationValue(ConfigurationVariables.ClientId),
         conf.GetConfigurationValue(ConfigurationVariables.GrantType),
-        conf.GetConfigurationValue(ConfigurationVariables.AuthUsername),
-        conf.GetConfigurationValue(ConfigurationVariables.AuthPassword)
+        conf.GetConfigurationValue(ConfigurationVariables.ClientSecret)
     );
 
     var usersApi = new UsersApi(

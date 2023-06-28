@@ -11,7 +11,7 @@ namespace FS.Keycloak.RestApiClient.Client
     public class CustomKeycloakHttpClient : HttpClient
     {
         private readonly string _authTokenUrl;
-        private readonly string _user;
+        
         private readonly string _password;
         private readonly string _clientId;
         private readonly string _grantType;
@@ -20,14 +20,13 @@ namespace FS.Keycloak.RestApiClient.Client
 
         public string AuthServerUrl { get; }
 
-        public CustomKeycloakHttpClient(string authServerUrl, string realm, string clientId, string grantType, string user, string password)
-            : this(authServerUrl, realm, clientId, grantType, user, password, new HttpClientHandler(), true) { }
+        public CustomKeycloakHttpClient(string authServerUrl, string realm, string clientId, string grantType, string password)
+            : this(authServerUrl, realm, clientId, grantType, password, new HttpClientHandler(), true) { }
 
-        public CustomKeycloakHttpClient(string authServerUrl, string realm, string clientId, string grantType, string user, string password, HttpMessageHandler handler, bool disposeHandler)
+        public CustomKeycloakHttpClient(string authServerUrl, string realm, string clientId, string grantType, string password, HttpMessageHandler handler, bool disposeHandler)
             : base(handler, disposeHandler)
         {
             _authTokenUrl = $"{authServerUrl}/realms/{realm}/protocol/openid-connect/token";
-            _user = user;
             _password = password;
             _clientId = clientId;
             _grantType = grantType;

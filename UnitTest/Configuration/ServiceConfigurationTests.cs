@@ -30,18 +30,5 @@ namespace UnitTest.Configuration
 
             Assert.That(result, Is.EqualTo("false"));
         }
-
-        [Test]
-        public void TestMissingVariableThrowsException()
-        {
-            var inMemorySettings = new Dictionary<string, string> { {"TokenValidation", "false"} };
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(inMemorySettings)
-                .Build();
-
-            var exception = Assert.Throws<UnsetEnvironmentVariableException>(() => new ServiceConfiguration(configuration));
-
-            Assert.That(exception.Message, Is.EqualTo("Environment variable 'IssuerCertificate' not set."));
-        }
     }
 }

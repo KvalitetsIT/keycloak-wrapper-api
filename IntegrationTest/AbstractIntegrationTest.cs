@@ -57,9 +57,6 @@ namespace IntegrationTest
                 .WithName("service-qa")
                 .WithNetwork(network)
                 .WithEnvironment("TokenValidation", "false")
-                .WithEnvironment("IssuerCertificate", "VALUE")
-                .WithEnvironment("AllowedIssuer", "VALUE")
-                .WithEnvironment("AllowedAudience", "VALUE")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(r => r.ForPath("/healthz").ForPort(8081)))
                 .Build();
 
