@@ -1,8 +1,10 @@
 using KitNugs.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KitNugs.Controllers
 {
+    [Authorize]
     public class HelloController : HelloControllerBase
     {
         private readonly ILogger<HelloController> _logger;
@@ -16,7 +18,7 @@ namespace KitNugs.Controllers
 
         public override async Task<UserResponse> Users([FromBody] UserResponse body)
         {
-            return await _userService.CreateUser(body); 
+            return await _userService.CreateUser(body);
         }
 
         public override async Task<ICollection<UserResponse>> UsersAll([FromQuery] int? page, [FromQuery] int? limit)
