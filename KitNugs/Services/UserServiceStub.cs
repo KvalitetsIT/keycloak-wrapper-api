@@ -16,12 +16,13 @@ namespace KitNugs.Services
             _logger = logger;
         }
 
-        public async Task CreateUser(UserResponse userToCreate)
+        public async Task CreateUser(string tenantId, UserResponse userToCreate)
         {
             _storage.Add(userToCreate);
         }
 
-        public async Task<IList<UserResponse>> GetUsers()
+
+        public async Task<IList<UserResponse>> GetUsersForTenant(string tenantId)
         {
             return _storage;
         }

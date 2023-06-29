@@ -2,7 +2,9 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using FS.Keycloak.RestApiClient.Api;
 using FS.Keycloak.RestApiClient.Client;
+using FS.Keycloak.RestApiClient.Model;
 using KitNugs.Configuration;
+using KitNugs.Controllers;
 using KitNugs.Logging;
 using KitNugs.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,7 +25,10 @@ var serviceConfiguration = new ServiceConfiguration(builder.Configuration);
 
 builder.Services.AddScoped<IServiceConfiguration, ServiceConfiguration>();
 builder.Services.AddScoped<IUserService, UserServiceKeycloak>();
+builder.Services.AddScoped<IMapper<UserResponse,UserRepresentation>, KeycloakUserMapper>();
 builder.Services.AddScoped<ISessionIdAccessor, DefaultSessionIdAccessor>();
+builder.Services.AddScoped<IExceptionHandler, HttpExceptionHandler>();
+builder.Services.AddScoped<ITokenHandler, TokenHandler>();
 builder.Services.AddScoped<IUsersApi>((sp) =>
 {
     var conf = sp.GetService<IServiceConfiguration>();

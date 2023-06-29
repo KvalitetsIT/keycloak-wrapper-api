@@ -39,7 +39,7 @@
 
   <Target Name="NSwag" BeforeTargets="BeforeBuild">
     <Exec
-      Command="$(NSwagExe_Net70) openapi2cscontroller /input:api.yaml /classname:Hello /namespace:KitNugs.Controllers /output:Generated/HelloController.cs /UseLiquidTemplates:true /AspNetNamespace:Microsoft.AspNetCore.Mvc /ControllerStyle:abstract /ControllerBaseClass:Microsoft.AspNetCore.Mvc.ControllerBase" />
+      Command="$(NSwagExe_Net70) openapi2cscontroller /input:api.yaml /classname:Hello /namespace:KitNugs.Controllers /output:Generated/HelloController.cs /UseLiquidTemplates:true /TemplateDirectory:Templates /AspNetNamespace:Microsoft.AspNetCore.Mvc /ControllerStyle:abstract /ControllerBaseClass:Microsoft.AspNetCore.Mvc.ControllerBase" />
     <ItemGroup>
       <Compile Include="Generated/HelloController.cs" Exclude="@(Compile)" />
     </ItemGroup>

@@ -5,7 +5,7 @@ namespace KitNugs.Services
 {
     public interface IUserService
     {
-        Task CreateUser(UserResponse userToCreate);
-        Task<IList<UserResponse>> GetUsers();
+        Task CreateUser(string tenantId, UserResponse userToCreate);
+        Task<IList<UserResponse>> GetUsersForTenant(string tenantId);
     }
 }

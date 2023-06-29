@@ -17,6 +17,7 @@ services:
       - ClientSecret=
       - ClientId=keycloak-createuser-api
       - RealmToManage=SSO-Local
+      - TenantAttributeName=customerId
 
       - "Serilog__MinimumLevel__Default=Debug"
     ports:
