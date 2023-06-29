@@ -107,9 +107,23 @@ components:
         - username
       properties:
         username:
-          description: Your name
+          description: Your username
           type: string
-          example: "John Doe"
+          example: "John@Doe.dk"
+        firstName:
+          description: Your first name
+          type: string
+          example: "John"
+        lastName:
+          description: Your last name
+          type: string
+          example: "Doe"
+        requiredActions:
+          description: The required actions which the user will be prompted for on next login
+          type: array
+          items:
+            type: string
+          example: "CONFIGURE_TOTP"
       
       additionalProperties: false
 
