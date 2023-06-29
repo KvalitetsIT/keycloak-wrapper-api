@@ -10,15 +10,15 @@ namespace KitNugs.Controllers
 {
     [ApiController] //if we mark a controller with the [ApiController]  attribute, it will automatically trigger an HTTP 400 response if there is a model validation error.
     [Authorize]
-    public class HelloController : HelloControllerBase
+    public class UserController : HelloControllerBase
     {
-        private readonly ILogger<HelloController> _logger;
+        private readonly ILogger<UserController> _logger;
         private readonly IUserService _userService;
         private readonly IExceptionHandler _exceptionHandler;
         private readonly ITokenHandler _tokenHandler;
 
-        public HelloController(
-            ILogger<HelloController> logger,
+        public UserController(
+            ILogger<UserController> logger,
             IServiceConfiguration configuration,
             IUserService userService,
             IExceptionHandler exceptionHandler,
