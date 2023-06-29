@@ -13,12 +13,7 @@ namespace UnitTest.Services
         [SetUp]
         public void Setup()
         {
-            ILogger<UserServiceStub> logger = Substitute.For<ILogger<UserServiceStub>>();
-
-            serviceConfiguration = Substitute.For<IServiceConfiguration>();
-            serviceConfiguration.GetConfigurationValue(ConfigurationVariables.AllowedAudience).Returns("VALUE");
-
-            helloService = new UserServiceStub(serviceConfiguration, logger);
+            
         }
 
     }
