@@ -1,3 +1,5 @@
+using System.Net;
+using FS.Keycloak.RestApiClient.Client;
 using Microsoft.AspNetCore.Mvc;
 
 public class HttpExceptionHandler : IExceptionHandler
@@ -8,13 +10,32 @@ public class HttpExceptionHandler : IExceptionHandler
         {
             throw exceptionToHandle;
         }
-        catch (HttpRequestException e)
+        catch (HttpRequestException httpException)
         {
-            var errorModel = new Error(e.Message, e.StatusCode);
+            var errorModel = new Error(httpException.Message, (int?)httpException.StatusCode);
             return new JsonResult(errorModel)
             {
-                StatusCode = (int)e.StatusCode
+                StatusCode = (int?)httpException.StatusCode
             };
-        };
+        }
+        catch (ApiException apiException)
+        {
+
+            var errorModel = new Error(apiException.Message, apiException.ErrorCode);
+            return new JsonResult(errorModel)
+            {
+                StatusCode = apiException.ErrorCode
+            };
+        }
+        catch (Exception exception)
+        {
+            var errorcode = HttpStatusCode.InternalServerError;
+            var errorMessage = "Unknown error occured";
+            var errorModel = new Error(errorMessage, (int)errorcode);
+            return new JsonResult(errorModel)
+            {
+                StatusCode = (int)errorcode
+            };
+        }
     }
 }

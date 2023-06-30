@@ -7,9 +7,9 @@ public class Error
     public int status { get; set; }
     public DateTime timestamp { get; set; } = DateTime.Now;
 
-    public Error(string error, HttpStatusCode? status)
+    public Error(string error, int? status)
     {
-        var statusCode = status == null ? HttpStatusCode.InternalServerError : status;
+        var statusCode = status == null ? (int)HttpStatusCode.InternalServerError : status;
         this.status = (int)statusCode;
         this.error = error;
     }
