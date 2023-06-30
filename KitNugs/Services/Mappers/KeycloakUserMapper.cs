@@ -20,7 +20,7 @@ public class KeycloakUserMapper : IMapper<UserResponse, UserRepresentation>
         return new FS.Keycloak.RestApiClient.Model.UserRepresentation()
         {
             Username = internalUser.Username,
-            Email = internalUser.Username,
+            Email = internalUser.Email,
             FirstName = internalUser.FirstName,
             LastName = internalUser.LastName,
             RequiredActions = internalUser.RequiredActions,
