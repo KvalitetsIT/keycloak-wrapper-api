@@ -28,6 +28,7 @@ namespace UnitTest.Services.Mappers
             var keycloakUser = new UserRepresentation()
             {
                 Username = "1",
+                Email = "4",
                 FirstName = "2",
                 LastName = "3",
                 RequiredActions = new List<string>() { "4" }
@@ -37,6 +38,7 @@ namespace UnitTest.Services.Mappers
 
             Assert.AreEqual(keycloakUser.Username, internalUser.Username);
             Assert.AreEqual(keycloakUser.FirstName, internalUser.FirstName);
+            Assert.AreEqual(keycloakUser.Email, internalUser.Email);
             Assert.AreEqual(keycloakUser.LastName, internalUser.LastName);
             Assert.AreEqual(1, internalUser.RequiredActions.Count());
             Assert.AreEqual(keycloakUser.RequiredActions.First(), internalUser.RequiredActions.First());
@@ -50,6 +52,7 @@ namespace UnitTest.Services.Mappers
             var internalUser = new UserResponse()
             {
                 Username = "1",
+                Email = "4",
                 FirstName = "2",
                 LastName = "3",
                 RequiredActions = new List<string>() { "4" }
@@ -58,6 +61,7 @@ namespace UnitTest.Services.Mappers
             var keycloakUser = mapper.MapTo(internalUser);
 
             Assert.AreEqual(keycloakUser.Username, internalUser.Username);
+            Assert.AreEqual(keycloakUser.Email, internalUser.Email);
             Assert.AreEqual(keycloakUser.FirstName, internalUser.FirstName);
             Assert.AreEqual(keycloakUser.LastName, internalUser.LastName);
             Assert.AreEqual(1, internalUser.RequiredActions.Count());

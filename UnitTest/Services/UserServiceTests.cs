@@ -51,19 +51,19 @@ namespace UnitTest.Services
 
             userapi.Setup(p => p.GetUsersAsync(
                 realm,
-                null, null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, null, null, null, null, null, null, 0, 5, null, null, null,
                 tenantAttributeName + ":" + tenantId,
                 It.IsAny<CancellationToken>()
             )).Returns(Task.FromResult(new List<UserRepresentation>() { keycloakUser }));
 
             mapper.Setup(p => p.MapFrom(keycloakUser)).Returns(userToCreate);
 
-            var allUsersForTenant = userService.GetUsersForTenant(tenantId).Result;
+            var allUsersForTenant = userService.GetUsersForTenant(tenantId, 1, 5).Result;
 
             mapper.Verify(mapper => mapper.MapFrom(keycloakUser), Times.Once());
             userapi.Verify(userapi => userapi.GetUsersAsync(
                 realm,
-                null, null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, null, null, null, null, null, null, 0, 5, null, null, null,
                 tenantAttributeName + ":" + tenantId,
                 It.IsAny<CancellationToken>()
             ), Times.Once());

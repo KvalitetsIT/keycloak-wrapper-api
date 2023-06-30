@@ -110,6 +110,10 @@ components:
           description: Your username
           type: string
           example: "John@Doe.dk"
+        email:
+          description: Your email
+          type: string
+          example: "John@Doe.dk"
         firstName:
           description: Your first name
           type: string

@@ -35,11 +35,13 @@ namespace KitNugs.Services
             await _usersApi.PostUsersAsync(_realm, userRepresentation);
         }
 
-        public async Task<IList<UserResponse>> GetUsersForTenant(string tenantId)
+        public async Task<IList<UserResponse>> GetUsersForTenant(string tenantId, int? page, int? pageSize = 10)
         {
-            var keycloakUsers = await _usersApi.GetUsersAsync(_realm, q: _tokenAttributeName + ":" + tenantId);
+            var pageOneIndexed = page;
+            var pageZeroIndexed = page - 1;
 
-            var toReturn = keycloakUsers.Select(_userMapper.MapFrom);
+            var response = await _usersApi.GetUsersAsync(_realm, q: _tokenAttributeName + ":" + tenantId, first: pageZeroIndexed, max: pageSize);
+            var toReturn = response.Select(_userMapper.MapFrom);
 
             return toReturn.ToList<UserResponse>();
         }

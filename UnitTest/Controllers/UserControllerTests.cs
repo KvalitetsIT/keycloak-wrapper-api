@@ -89,7 +89,7 @@ namespace UnitTest.Controllers
 
             var controller = new UserController(logger.Object, configuration.Object, userservice.Object, exceptionHandler.Object, tokenHandler.Object);
             var result = controller.UsersAll(null, null);
-            userservice.Verify(userservice => userservice.GetUsersForTenant(tenantId), Times.Once());
+            userservice.Verify(userservice => userservice.GetUsersForTenant(tenantId,null,null), Times.Once());
         }
 
         [Test]
@@ -105,7 +105,7 @@ namespace UnitTest.Controllers
 
             var tenantId = "tenant1";
             tokenHandler.Setup(tokenhandler => tokenhandler.ExtractTenantIdFromToken(It.IsAny<JwtSecurityToken>())).Returns(tenantId);
-            userservice.Setup(userservice => userservice.GetUsersForTenant(It.IsAny<string>())).Throws(new Exception("test exception"));
+            userservice.Setup(userservice => userservice.GetUsersForTenant(It.IsAny<string>(),null,null)).Throws(new Exception("test exception"));
 
             var controller = new UserController(logger.Object, configuration.Object, userservice.Object, exceptionHandler.Object, tokenHandler.Object);
             var result = controller.UsersAll(null, null);

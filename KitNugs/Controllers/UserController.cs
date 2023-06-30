@@ -53,7 +53,7 @@ namespace KitNugs.Controllers
                 var token = await _tokenHandler.getJwt(HttpContext);
                 var tenantId = _tokenHandler.ExtractTenantIdFromToken(token);
 
-                IList<UserResponse> users = await _userService.GetUsersForTenant(tenantId);
+                IList<UserResponse> users = await _userService.GetUsersForTenant(tenantId, page, limit);
                 return base.Ok(users);
             }
             catch (Exception e)
